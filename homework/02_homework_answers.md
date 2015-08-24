@@ -14,6 +14,7 @@ The row represents a purchase item in the order.
 ```
 
 2. How many orders do there appear to be?
+
 ```
 $  cut -f1 data/chipotle.tsv | uniq | wc -l
 1835
@@ -22,6 +23,7 @@ Minus the header line "order_id", there appears to be 1834 orders.
 ```
 
 3. How many lines are in this file?
+
 ```
 $ wc -l data/chipotle.tsv
 4623
@@ -30,6 +32,7 @@ And this returns 4623 lines
 ```
 
 4. Which burrito is more popular, steak or chicken?
+
 ```
 $ grep 'Chicken Burrito' data/chipotle.tsv | wc -l
 553
@@ -43,6 +46,7 @@ Chicken Burrito is more popular
 
 
 5. Do chicken burritos more often have black beans or pinto beans?
+
 ```
 $ grep 'Chicken Burrito' data/chipotle.tsv | grep 'Pinto Beans' | wc -l
 105
@@ -55,6 +59,7 @@ It appears that Chicken Burrito with Black Beans is more often ordered.
 ```
 
 6. Make a list of all of the CSV or TSV files in the DAT8 repo (using a single command). Think about how wildcard characters can help you with this task.
+
 ```
 $ ls data/*.tsv data/*.csv
 data/airlines.csv  data/chipotle.tsv  data/sms.tsv
@@ -63,6 +68,7 @@ data/airlines.csv  data/chipotle.tsv  data/sms.tsv
 
 
 7. Count the approximate number of occurrences of the word "dictionary" (regardless of case) across all files in the DAT8 repo.
+
 ```
 $ grep -rio 'dictionary' ../DAT8 | wc -l
 15
@@ -72,6 +78,7 @@ There are 15 occurences
 
 
 8. **Optional:** Use the the command line to discover something "interesting" about the Chipotle data. Try using the commands from the "advanced" section!
+
 ```
 $ for i in `seq 1 15`; do cut -f 1,2 data/chipotle.tsv | uniq -c | grep "$i " | wc -l; done
 403
