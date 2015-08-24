@@ -1,5 +1,5 @@
 ## Class 2 Homework: Command Line Chipotle [Solutions]
-# This document describes the solutions.
+### This document describes the solutions.
 
 **Command Line Tasks:**
 
@@ -66,6 +66,8 @@ data/airlines.csv  data/chipotle.tsv  data/sms.tsv
 ```
 $ grep -rio 'dictionary' ../DAT8 | wc -l
 15
+
+There are 15 occurences
 ```
 
 
@@ -87,10 +89,10 @@ $ for i in `seq 1 15`; do cut -f 1,2 data/chipotle.tsv | uniq -c | grep "$i " | 
 0
 1
 0
-
-This commands query the number of items per order. From the results it appears that most orders include only 2 purchase items (1039 orders), followed by 3 items (448 orders), and 1 item (403 orders) 
-
 ```
+This commands query the number of items per order. From the results it appears that most orders include only 2 purchase items (1039 orders), followed by 3 items (448 orders), and 1 item (403 orders)
+
+
 
 
 **Submitting Your Homework:**
