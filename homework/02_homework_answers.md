@@ -39,6 +39,7 @@ And this returns 4623 lines
 ```
 $ grep 'Chicken Burrito' data/chipotle.tsv | wc -l
 553
+[$ grep -ic 'chicken burrito' data/chipotel.tsv]
 
 $ grep 'Steak Burrito' data/chipotle.tsv | wc -l
 368
@@ -107,3 +108,4 @@ This commands query the number of items per order. From the results it appears
 that most orders include only 2 purchase items (1039 orders), followed by 3
 items (448 orders), and 1 item (403 orders)
 ```
+*** Make sure to include tests scripts ***
