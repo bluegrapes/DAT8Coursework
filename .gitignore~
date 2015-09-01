@@ -56,9 +56,4 @@ docs/_build/
 # PyBuilder
 target/
 
-# IPython & other project related stuff
 ipynb/
-.idea/
-
-
-
