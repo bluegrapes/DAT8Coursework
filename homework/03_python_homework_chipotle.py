@@ -34,6 +34,20 @@ assert(range(1, maxidx+1) == list(set([int(el[0]) for el in data]))), "missing g
 total_orders = sum([float(row[4][1:]) for row in data])
 print "average price of an order: %.2f" % (total_orders / float(maxidx))
 
+### BEGIN COMMENTS
+#This doesn't assume any order in the data, your code is faster, but assumes more
+#Notice that we can get rid of [..] because python also has dictionary and set comprehensions
+maxidx = max(int(row[0]) for row in data)
+#I love the use of the assert
+#It's safer to typecast into a set since it assumes less than a list
+#Sets don't maintain order, while lists do
+assert(set(x + 1 for x in range(maxidx)) == set(int(el[0]) for el in data)), "missing gaps in order_id"
+#That's a long line, better to reference the sets with variables
+#I also redundantly read the ids twice
+#Equally effective to work with a simple mathematical statement
+idx = [int(row[0]) for row in data)]
+assert(max(idx) - min(idx) + 1 == len(set(idx)))
+### END COMMENTS
 
 '''
 INTERMEDIATE LEVEL
@@ -69,6 +83,26 @@ for key, val in burrito_orders:
 for key in bucket:
     print key, "average toppings = %d" % (sum(bucket[key]) / len(bucket[key]))
 
+### BEGIN COMMENTS
+###When you have a small set of values that will never need to be changed,
+###tuples are preferred over lists for safety/immutability
+bucket = {}
+# get the distinct burrito, and toppings
+burrito_orders = [(row[2], row[3]) for row in data if "Burrito" in row[2]]
+for key, val in burrito_orders:
+    # remove []
+    val = val[1:-1]
+    # find the toppings, remove the Salsa....
+    toppings = val[val.find(", [")+3:-1]
+    # add the counts to bucket
+    ###Ask for forgiveness not permission idiom
+    #Try to get a key, set as empty list if it does not exist
+    bucket.setdefault(key, []).append(len(toppings.split(',')))
+# now print the average
+###iteritems gives use key value pairs saving us extra dictionary accesses
+for key, val in bucket.iteritems():
+    print key, "average toppings = %d" % (sum(val) / len(val))
+### END COMMENTS
 
 '''
 ADVANCED LEVEL
