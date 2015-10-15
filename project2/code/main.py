@@ -7,11 +7,17 @@ from collections import Counter, defaultdict
 import seaborn as sns
 from nltk.stem.porter import *
 from wordcloud import WordCloud
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.pipeline import Pipeline
+from sklearn.feature_extraction.text import TfidfVectorizer, HashingVectorizer, CountVectorizer
+from sklearn.cross_validation import train_test_split, cross_val_score, KFold
+from sklearn import metrics
+from scipy.stats import sem
 
 sns.set_style('whitegrid')
 
 # loading the dataset
-df = pd.read_json("../data/train.json")
+df = pd.read_json("data/train.json")
 
 '''
 ' Exploratory Statistics
@@ -22,6 +28,7 @@ print("unique cuisine count:", len(df.cuisine.unique()))
 # plot number of cuisines
 cuisines = df.cuisine.value_counts(sort=True)
 cuisines.plot(kind="bar", figsize=(12,6), title="Number of Cuisines")
+
 
 # calculating the usage of each ingredient, and for each cuisine
 cuisine_dict = defaultdict(Counter)
@@ -77,15 +84,69 @@ for key, value in cuisine_dict.iteritems():
 
 
 
+'''
+ Modeling
+'''
+# mapping categorical response var
+df['cuisine_idx'] = df.cuisine.map({
+    'brazilian':    0,
+    'british':      1,
+    'cajun_creole': 2,
+    'chinese':      3,
+    'filipino':     4,
+    'french':       5,
+    'greek':        6,
+    'indian':       7,
+    'irish':        8,
+    'italian':      9,
+    'jamaican':     10,
+    'japanese':     11,
+    'korean':       12,
+    'mexican':      13,
+    'moroccan':     14,
+    'russian':      15,
+    'southern_us':  16,
+    'spanish':      17,
+    'thai':         18,
+    'vietnamese':   19
+})
 
+# combine the ingredients list into one sentence
+df['ingredients_all'] = df.ingredients.apply(lambda x: " ".join(x))
 
-# convert to mac
-# stem
+# set the X, y
+X = df['ingredients_all']
+y = df['cuisine_idx']
 
-# pearson coefficient
-# count, multinomial nb
-# hash, multinomial nb
-# tfidf, multinomial nb
+# split data to train set and test set
+X_train, X_test, y_train, y_test = train_test_split(X, y)
+
+# evaluate model function
+def cross_val_validation(clf, X, y, K):
+    # create a k-fold cross validation iterator of K folds
+    cv = KFold(len(y), K, shuffle=True, random_state=0)
+    # get the mean score, and standard error mean
+    scores = cross_val_score(clf, X, y, cv=cv)
+    print scores
+    print ("Mean score: {0:.3f} (+/-{1:.3f})").format(np.mean(scores), sem(scores))
+
+# compare the models
+clf_1 = Pipeline([
+    ('vect', CountVectorizer()),
+    ('clf', MultinomialNB()),
+])
+clf_2 = Pipeline([
+    ('vect', HashingVectorizer(non_negative=True)),
+    ('clf', MultinomialNB()),
+])
+clf_3 = Pipeline([
+    ('vect', TfidfVectorizer()),
+    ('clf', MultinomialNB()),
+])
+clfs = [clf_1, clf_2, clf_3]
+for clf in clfs:
+    cross_val_validation(clf, X, y, 5)
+
 # tfidf, ova
 # decisiontreeregressor
 # knn
