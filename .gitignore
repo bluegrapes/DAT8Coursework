@@ -61,5 +61,7 @@ target/
 ipynb/
 .idea/
 
-
+#
+kaggle/
+.Rhistory
 
